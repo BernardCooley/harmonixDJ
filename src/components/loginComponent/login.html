@@ -1,0 +1,18 @@
+<div class="container" ng-show="true">
+
+	<br>
+	<form name="signInForm" novalidate>
+		<h2>Sign In</h2>
+		<br>
+		<label>Username</label>
+		<input class="form-control" ng-model="user.username" type="text" name="username" required placeholder="Username">
+		<br>
+		<label>Password</label>
+		<input class="form-control" ng-model="user.password" type="password" name="password" required placeholder="Password">
+		<br>
+		<button class="btn btn-info" ng-click="logIn(user.username, user.password)" ng-disabled="signInForm.$invalid">Sign In</button>
+		<br><br>
+		<a href="/register">Not registered?......<strong>Register</strong></a>
+	</form>
+</div>
+<br><br>

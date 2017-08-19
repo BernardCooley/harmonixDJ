@@ -1,0 +1,61 @@
+<nav-component></nav-component>
+<div class="container" ng-show="true">
+	<h1 class="">Set List</h1>
+
+	<button class="btn btn-success" ng-click="saveNewSetlist()">Save Setlist</button>
+
+	<form name="form" novalidate>
+		<table class="table">
+			<thead>
+				<tr>
+					<th>Artist</th>
+					<th>Title</th>
+					<th>Key</th>
+					<th>Action</th>
+					<th>&nbsp;</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="setTrack in setlist" ng-click="clicked">
+					<td><h4>{{setTrack.Artist}}</h4></td>
+					<td><h4>{{setTrack.Title}}</h4></td>
+					<td><h4>{{setTrack.Key}}</h4></td>
+					<td><button class="btn btn-success" ng-click="removeFromSL(setTrack._id)">Remove from set list</button></td>
+				</tr>
+			</tbody>
+		</table>
+	</form>
+
+
+
+	<input class="form-control searchBox" type="text" name="search" ng-model="searchText" placeholder="Search">
+	<input class="form-control searchBox" type="text" name="search" ng-model="track" placeholder="Compatible Keys">
+	<input class="form-control searchBox" type="text" name="search" ng-model="user" placeholder="User" value="Harri">
+	<br>
+	<form name="form" novalidate>
+		<table class="table">
+			<thead>
+				<tr>
+					<th>Artist</th>
+					<th>Title</th>
+					<th>Key</th>
+					<th>Action</th>
+					<th>User</th>
+					<th>&nbsp;</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="track in tracks.data | filter:searchText | filter:user | filter:track | orderBy : 'Key'" ng-click="clicked">
+					<td><h4>{{track.Artist}}</h4></td>
+					<td><h4>{{track.Title}}</h4></td>
+					<td><h4>{{track.Key}}</h4></td>
+					<td><button class="btn btn-success" ng-click="addToSL(track._id); showCompTracks(track._id)">Add to set list</button></td>
+					<td><h4>{{track.User}}</h4></td>
+				</tr>
+			</tbody>
+		</table>
+	</form>
+
+
+</div>
+<br><br>

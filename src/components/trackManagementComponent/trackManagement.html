@@ -1,0 +1,38 @@
+<nav-component></nav-component>
+<div class="container" ng-show="true">
+	<h1 class="">Track Management</h1>
+	<input class="form-control searchBox" type="text" name="search" ng-model="searchText" placeholder="Search">
+	<br>
+	<form name="form" novalidate>
+		<table class="table">
+			<thead>
+				<tr>
+					<th>Artist</th>
+					<th>Title</th>
+					<th>Key</th>
+					<th>Action</th>
+					<th>&nbsp;</th>
+					<th>&nbsp;</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td><input class="form-control" ng-model="track.Artist" type="text" name="Artist" required placeholder="Artist"></td>
+					<td><input class="form-control" ng-model="track.Title" type="text" name="Title" required placeholder="Title"></td>
+					<td><input class="form-control" ng-model="track.Key" type="text" name="Key" required placeholder="Key"></td>
+					<td><button class="btn btn-primary" ng-show="true" ng-click="addtrack()" ng-disabled="form.$invalid">Add track</button></td>
+					<td><button class="btn btn-info" ng-show="true" ng-click="update()" ng-disabled="form.$invalid">Update</button></td>
+					<td><button class="btn btn-info" ng-show="true" ng-click="deselect()">Cancel</button></td>
+				</tr>
+				<tr ng-repeat="track in tracks.data | filter:searchText | orderBy : 'Key'">
+					<td><h4>{{track.Artist}}</h4></td>
+					<td><h4>{{track.Title}}</h4></td>
+					<td><h4>{{track.Key}}</h4></td>
+					<td><button class="btn btn-danger" ng-show="true" ng-disabled="isDisabled" ng-click="remove(track._id)">Remove</button></td>
+					<td><button class="btn btn-warning" ng-click="edit(track._id)">Edit</button></td>
+				</tr>
+			</tbody>
+		</table>
+	</form>
+</div>
+<br><br>
