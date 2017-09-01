@@ -2,14 +2,50 @@ var path = require('path');
 var express = require('express');
 var bodyParser = require('body-parser');
 var mongojs = require('mongojs');
-var db = mongojs('harmonixDB', ['harmonixDB']);
+// var db = mongojs('harmonixDB', ['harmonixDB']);
+var mongoose = require('mongoose');
+var MongoClient = require('mongodb').MongoClient;
+var mongoClientDB;
+
+var Schema = mongoose.Schema;
 
 var app = express().use(express.static(
     path.join(__dirname, '')
 ))
 
+var uri = 'mongodb://bernardcooley:3cqEma7omUF303mh@harmonixdj-cluster01-shard-00-00-itmpr.mongodb.net:27017,harmonixdj-cluster01-shard-00-01-itmpr.mongodb.net:27017,harmonixdj-cluster01-shard-00-02-itmpr.mongodb.net:27017/test?ssl=true&replicaSet=harmonixDJ-cluster01-shard-0&authSource=admin';
+
+MongoClient.connect(uri, function(err, db) {
+	mongoClientDB = db;
+});
+
+// mongoose.connect('mongodb://bernardcooley:3cqEma7omUF303mh@harmonixdj-cluster01-shard-00-00-itmpr.mongodb.net:27017,harmonixdj-cluster01-shard-00-01-itmpr.mongodb.net:27017,harmonixdj-cluster01-shard-00-02-itmpr.mongodb.net:27017/test?ssl=true&replicaSet=harmonixDJ-cluster01-shard-0&authSource=admin');
+
+// var usersSchema = new Schema({
+// 	usernames: Array
+// });
+
+// mongoose.model('users', usersSchema);
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+
+app.get('/users1', function(req, res) {
+	mongoClientDB.collection('users').find(function (err, users) {
+		console.log(users);
+		res.send(users);
+	});
+});
+
+// app.get('/users1', function(req, res) {
+// 	mongoose.model('users').find(function(err, users) {
+// 		console.log('users1 called');
+// 		console.log(users);
+// 		res.json(users);
+// 	});
+// });
+
 
 app.get('/tracks', function (req, res) {
 	// console.log("I recieved a get request");
