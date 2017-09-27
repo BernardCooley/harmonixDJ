@@ -27,8 +27,6 @@ angular.module('angularApp')
             
             // console.log(add1(5));
 
-
-
             console.log("Sign in controller");
 
             $scope.addUser = function(username) {
