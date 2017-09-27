@@ -1,50 +1,63 @@
-var path = require('path');
-var express = require('express');
-var bodyParser = require('body-parser');
-var mongojs = require('mongojs');
-// var db = mongojs('harmonixDB', ['harmonixDB']);
-var mongoose = require('mongoose');
-var MongoClient = require('mongodb').MongoClient;
+const path = require('path');
+const https = require('https');
+const fs = require('fs');
+const express = require('express');
+const bodyParser = require('body-parser');
+const mongojs = require('mongojs');
+// const db = mongojs('harmonixDB', ['harmonixDB']);
+const mongoose = require('mongoose');
+const MongoClient = require('mongodb').MongoClient;
+const app = express();
+const directoryToServe = 'client';
+const port = 3443;
+
 var mongoClientDB;
 
 var Schema = mongoose.Schema;
 
-var app = express().use(express.static(
-    path.join(__dirname, '')
-))
+app.use(express.static(path.join(__dirname, '')));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
-var uri = 'mongodb://bernardcooley:3cqEma7omUF303mh@harmonixdj-cluster01-shard-00-00-itmpr.mongodb.net:27017,harmonixdj-cluster01-shard-00-01-itmpr.mongodb.net:27017,harmonixdj-cluster01-shard-00-02-itmpr.mongodb.net:27017/test?ssl=true&replicaSet=harmonixDJ-cluster01-shard-0&authSource=admin';
+const httpsOptions = {
+	cert: fs.readFileSync(path.join(__dirname, 'ssl', 'server.crt')),
+	key: fs.readFileSync(path.join(__dirname, 'ssl', 'server.key'))
+}
 
-MongoClient.connect(uri, function(err, db) {
-	mongoClientDB = db;
-});
+// var uri = 'mongodb://bernardcooley:3cqEma7omUF303mh@harmonixdj-cluster01-shard-00-00-itmpr.mongodb.net:27017,harmonixdj-cluster01-shard-00-01-itmpr.mongodb.net:27017,harmonixdj-cluster01-shard-00-02-itmpr.mongodb.net:27017/test?ssl=true&replicaSet=harmonixDJ-cluster01-shard-0&authSource=admin';
+
+// MongoClient.connect(uri, function(err, db) {
+// 	mongoClientDB = db;
+// });
 
 // mongoose.connect('mongodb://bernardcooley:3cqEma7omUF303mh@harmonixdj-cluster01-shard-00-00-itmpr.mongodb.net:27017,harmonixdj-cluster01-shard-00-01-itmpr.mongodb.net:27017,harmonixdj-cluster01-shard-00-02-itmpr.mongodb.net:27017/test?ssl=true&replicaSet=harmonixDJ-cluster01-shard-0&authSource=admin');
 
 // var usersSchema = new Schema({
-// 	usernames: Array
+// 	name: String,
+// 	email: String,
+// 	username: String,
+// 	password: String
 // });
 
 // mongoose.model('users', usersSchema);
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
 
 
-app.get('/users1', function(req, res) {
-	mongoClientDB.collection('users').find(function (err, users) {
-		console.log(users);
-		res.send(users);
-	});
-});
 
 // app.get('/users1', function(req, res) {
-// 	mongoose.model('users').find(function(err, users) {
-// 		console.log('users1 called');
+// 	mongoClientDB.collection('users').find(function (err, users) {
 // 		console.log(users);
-// 		res.json(users);
+// 		res.send(users);
 // 	});
 // });
+
+app.get('/users1', function(req, res) {
+	mongoose.model('users').find(function(err, users) {
+		console.log('users1 called');
+		console.log(users);
+		res.json(users);
+	});
+});
 
 
 app.get('/tracks', function (req, res) {
@@ -145,10 +158,15 @@ app.put('/tracks/:id', function(req, res) {
 	});
 });
 
-app.get('/*', function(req, res){
-    res.sendFile(__dirname + '/index.html');
-});
+https.createServer(httpsOptions, app)
+	.listen(port, function() {
+		console.log(`Serving the ${directoryToServe}/ directory at https://localhost:${port}`)
+	});
+
+// app.get('/*', function(req, res){
+//     res.sendFile(__dirname + '/index.html');
+// });
 
 
-console.log('Server running: http://localhost:8080')
-app.listen(8080);
+// console.log('Server running: http://localhost:8080')
+// app.listen(8080);
