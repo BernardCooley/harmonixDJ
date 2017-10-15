@@ -5,6 +5,8 @@ var csso = require('gulp-csso');
 var uglify = require('gulp-uglify');
 var concat = require('gulp-concat');
 
+gulp.task('default', ['sass', 'compress-dev', 'watch']);
+
 gulp.task('sass', function() {
     gulp.src([
         'public/**/*.scss',
@@ -21,6 +23,7 @@ gulp.task('compress-dev', function() {
         'node_modules/angular/angular.js',
         'node_modules/angular-ui-router/release/angular-ui-router.js',
         'node_modules/angular-animate/angular-animate.js',
+        'https://cdnjs.cloudflare.com/ajax/libs/angular-messages/1.5.8/angular-messages.js',
         'app.js',
         'src/**/*.js',
     ])
@@ -48,5 +51,5 @@ gulp.task('watch', function() {
     gulp.watch('app.js', ['compress-dev']);
 });
 
-gulp.task('dev',  ['sass', 'compress-dev' , 'watch']);
+gulp.task('dev',  ['sass', 'compress-dev', 'scripts', 'watch']);
 gulp.task('build', ['sass', 'compress-prod']);
